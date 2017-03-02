@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+	<script src="phonegap.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>	
+	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+ var opciones;
+ opciones={maximumAge:500000,enableHighAccuracy:true,timeout:5000};
+
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady(){
+		/*******Evento para registrar servicios*********/
+		$("#btnGuardar").tap(function (){	
+			var nom=$("#Nombre").val();
+			var dir=$("#Direccion").val();
+			var rfc=$("#RFC").val();
+			var tel=$("#Telefono").val();
+			var clasif=$("#clasificacion").val();
+			var foto="img/fotos/foto1.jpg";
+			var lat=$("#latitud").val();
+			var longit=$("#longitud").val();
+								
+			$.ajax({
+				type:"POST",
+				//http://itslmedellin.esy.es/
+				url:"http://itslmedellin.esy.es/Guardar.php",
+				data:"Nom="+nom+"&Dir="+dir+"&Rfc="+rfc+"&Tel="+tel+"&Clasif="+clasif+"&Foto="+foto+"&Lat="+lat+"&Long="+longit,
+				success:function (datos) {
+					alert("Datos guardados correctamente: "+datos);
+				}
+			});
+		});
+
+		/**********Evento para consulta*************/		
+		$("#btnConsServ").tap(function (){
+				$.ajax({	
+					type:"POST",
+					//http://itslmedellin.esy.es/
+					url:"http://itslmedellin.esy.es/Consulta.php",
+					data:"",
+					success:function (datos) {
+						alert(datos);	
+						var reg=$.parseJSON(datos);
+						var fila=$("#datosTodosMostrar");
+					 		for(var i in reg){								 
+					 		fila.html("<tr><td>"+reg[i].Id_Servicio+"</td><td>"+reg[i].Nombre_servicio+"</td><td>"+reg[i].Direccion+"</td><td>"+reg[i].RFC+"</td><td>"+reg[i].Telefono+"</td><td>"+reg[i].Clasificacion+"</td><td>"+reg[i].Foto+"</td><td>"+reg[i].Latitud+"</td><td>"+reg[i].Longitud+"</td></tr>");					
+					 }
+					$("#tb1").table("refresh");
+				}
+			});
+		});
+		//*****************************************************
+		//*******************evento para consultar por id***************************
+		
+$("#btnConsID").tap(function (){
+	var id=$("#txtIDServ").val();
+
+			$.ajax({
+				type:"POST",
+				//http://itslmedellin.esy.es/
+				url:"http://itslmedellin.esy.es/ConsultaID.php",
+				data:"ID="+id,
+				success:function (datos) {
+					alert(datos);	
+					var reg=$.parseJSON(datos);
+					var fila=$("#datosID");
+					 for(var i in reg){
+					 	fila.html("<tr><td>"+reg[i].Id_Servicio+"</td><td>"+reg[i].Nombre_servicio+"</td><td>"+reg[i].Direccion+"</td><td>"+reg[i].RFC+"</td><td>"+reg[i].Telefono+"</td><td>"+reg[i].Clasificacion+"</td><td>"+reg[i].Foto+"</td><td>"+reg[i].Latitud+"</td><td>"+reg[i].Longitud+"</td></tr>");
+					 }
+					$("#tb2").table("refresh");
+				}
+			});
+		});
+		//**********************funcion para actualizar servicios******************************
+$("#btnConsAct").tap(function (){
+	var id=$("#txtActualizar").val();
+
+			$.ajax({
+				type:"POST",
+				//http://itslmedellin.esy.es/
+				url:"http://itslmedellin.esy.es/Actualizar_Servicio.php",
+				data:"ID="+id,
+				success:function (datos) {
+					alert(datos);	
+					var reg=$.parseJSON(datos);
+					var fila=$("#datosIDAct");
+					 for(var i in reg){								 
+					 	fila.html("<tr><td>"+reg[i].Id_Servicio+"</td><td>"+reg[i].Nombre_servicio+"</td><td>"+reg[i].Direccion+"</td><td>"+reg[i].RFC+"</td><td>"+reg[i].Telefono+"</td><td>"+reg[i].Clasificacion+"</td><td>"+reg[i].Foto+"</td><td>"+reg[i].Latitud+"</td><td>"+reg[i].Longitud+"</td></tr>");					
+					 }
+					$("#tb3").table("refresh");
+				}
+			});
+		});
+$("#btnActualizar").tap(function (){	
+			var id2=$("#IdServicio2").val();			
+			var nom2=$("#Nombre2").val();
+			var dir2=$("#Direccion2").val();
+			var rfc2=$("#RFC2").val();
+			var tel2=$("#Telefono2").val();
+			var clasif2=$("#clasificacion2").val();
+			var foto2="img/fotos/foto1.jpg";
+			var lat2=$("#latitud2").val();
+			var longit2=$("#longitud2").val();
+			alert("Funciona guardar");								
+			$.ajax({
+				type:"POST",
+				//http://itslmedellin.esy.es/
+				url:"http://itslmedellin.esy.es/Actualizar_Registro.php",
+				data:"Id2="+id2+"&Nom2="+nom2+"&Dir2="+dir2+"&Rfc2="+rfc2+"&Tel2="+tel2+"&Clasif2="+clasif2+"&Foto2="+foto2+"&Lat2="+lat2+"&Long2="+longit2,
+				success:function (datos) {
+					alert("Datos guardados correctamente: ");
+				}
+			});
+		});
+		//**********************funcion para eliminar servicios******************************
+		$("#btnEliminar").tap(function (){
+	var id=$("#txtEliminar").val();
+
+			$.ajax({
+				type:"POST",
+				//http://itslmedellin.esy.es/
+				url:"http://itslmedellin.esy.es/Eliminar_Servicio.php",
+				data:"ID="+id,
+				success:function (datos) {
+					alert(datos);	
+					var reg=$.parseJSON(datos);
+					var fila=$("#DatosEliminados");
+					 for(var i in reg){
+					 	fila.html("<p>Datos Eliminados correctamente</p>");
+					 }
+					$("#tb1").table("refresh");
+				}
+			});
+		});
+		//*****************************************************
+
+		//btnConsID
+	/***********Obtener Coordenadas***********************/
+	$("#btnCords").tap(function(){//Obtener coordenadas para el registro de servicios			
+  		obtenerUbicacion();
+	});
+	$("#btnFoto").tap(function (){//Capturar fotografia
+        navigator.device.capture.captureImage(function(mediaFiles){
+		    path = mediaFiles[0].fullPath;
+		    $('#regFoto').append('<img id="imagen" src="'+path+'" width="100%" />').attr('rel',path);
+	      },function(error){
+		        navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+	      },{limit:1});
+	    /*navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+    	destinationType: Camera.DestinationType.FILE_URI });
+
+		function onSuccess(imageURI) {
+   			$('#regFoto').append('<img id="imagen" src="'+imageURI+'" width="100%" />').attr('rel',imageURI);
+		}
+
+		function onFail(message) {
+    		alert('Fallo al obtener la foto: ' + message);
+		}*/
+  	});
+}
+	function obtenerUbicacion(){//Funcion que obtiene la Ubicación del dispositivo móvil
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(exito, falla, opciones);
+
+	  function exito(posic){
+	      //var corUbic=new google.maps.LatLng(posic.coords.latitude, posic.coords.longitude);
+	      $("#latitud").val(posic.coords.latitude);
+	      $("#longitud").val(posic.coords.longitude);	      
+	     }
+
+	      function falla(error){
+	         alert("Error en el servicio Geolocalizador: "+error.code+" detalle: "+error.response);
+	      }
+	  }else{
+	      alert("Su dispositivo no soporta la geolocalización o no esta habilitada esta funcionalidad");
+	  }
+    }
+</script>
+	<style type="text/css">
+		p{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+
+<!--*************Menu principal************************-->
+	<div data-role="page" id="Principal">
+		<div data-role="header">
+			<p>Menú principal</p>
+		</div>	
+		<div data-role="content">
+			<ul data-role="listview">
+				<li><a href="#Registrar">Registrar servicios</a></li>	
+				<li><a href="#Consultar">Consultar servicios</a></li>
+				<li><a href="#ConsultarID">Consultar servicios por ID</a></li>
+				<li><a href="#ActualizarServicio">Actualizar servicios</a></li>
+				<li><a href="#EliminarServicio">Eliminar servicios</a></li>
+			</ul>	
+		</div>
+		<div data-role="footer">
+			<p>pie de aplicación</p>
+		</div>
+	</div>
+	<!--*************Fin de Menu principal************************-->
+	<!--*************Menu Registrar************************-->
+	<div data-role="page" id="Registrar">
+		<div data-role="header">
+			<p>Registrar servicios</p>
+		</div>	
+		<div data-role="content">
+			<input type="text" id="Nombre" placeholder="Escribe el nombres del servicio">
+			<input type="text" id="Direccion" placeholder="Escribe la dirección">
+			<input type="text" id="RFC" placeholder="Escribe el RFC">
+			<input type="text" id="Telefono" placeholder="Escribe el número de teléfono">
+			<select id="clasificacion">
+				<option value="Restaurante">Restaurante</option>
+				<option value="Zapateria">Zapatería</option>
+				<option value="Farmacia">Farmacia</option>
+			</select>
+			<input type="button" id="btnFoto" value="Tomar foto">
+			<div id="regFoto"></div>
+			<input type="button" id="btnCords" value="Obtener coordenadas">
+			<input type="text" id="latitud" placeholder="Latitud">
+			<input type="text" id="longitud" placeholder="Longitud">
+			<input type="button" id="btnGuardar" value="Guardar servicio">
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+	<!--*************Fin Menu Registrar************************-->
+	<!--*************Menu Consultar************************-->
+	<div data-role="page" id="Consultar">
+		<div data-role="header">
+			<p>Consultar servicios</p>
+		</div>	
+		<div data-role="content">
+			<input type="button" id="btnConsServ" value="Consultar Todos los Servicios">
+			<div>
+			<table data-role="table" data-mode="columntoggle" class="ui-responsive" id="tb1">
+				<thead id="datosTodos">
+					<tr>
+						<th data-priority="1">Id</th>
+						<th data-priority="2">Nombre</th>
+						<th data-priority="3">Direción</th>
+						<th data-priority="4">RFC</th>
+						<th data-priority="5">Tel:</th>
+						<th data-priority="6">Clasif</th>
+						<th data-priority="7">Foto</th>
+						<th data-priority="8">Lat</th>
+						<th data-priority="9">Long</th>
+					</tr>
+				</thead>				
+				<tbody id="datosTodosMostrar">
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+<!--*************Fin Menu Consultar************************-->
+<!--*************Menu Consultar ID************************-->
+<div data-role="page" id="ConsultarID">
+		<div data-role="header">
+			<p>Consultar servicios por ID</p>
+		</div>	
+		<div data-role="content">
+			<input type="text" id="txtIDServ" placeholder="Escribe el numero de servicio">
+			<input type="button" id="btnConsID" value="Consultar Servicio">
+			<div>
+			<table data-role="table" data-mode="columntoggle" class="ui-responsive" id="tb2">
+				<thead id="datosTodos">
+					<tr>
+						<th data-priority="1">Id</th>
+						<th data-priority="2">Nombre</th>
+						<th data-priority="3">Direción</th>
+						<th data-priority="4">RFC</th>
+						<th data-priority="5">Tel:</th>
+						<th data-priority="6">Clasif</th>
+						<th data-priority="7">Foto</th>
+						<th data-priority="8">Lat</th>
+						<th data-priority="9">Long</th>
+					</tr>
+				</thead>				
+				<tbody id="datosID">
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+<!--*************Fin Menu Consultar ID************************-->
+<!--*************Menu Actualizar Servicios************************-->
+<div data-role="page" id="ActualizarServicio">
+		<div data-role="header">
+			<p>Actualizar Servicio</p>
+		</div>	
+		<div data-role="content">				
+			<input type="text" id="txtActualizar" placeholder="Escribe el numero de servicio">
+			<input type="button" id="btnConsAct" value="Consultar Servicio">
+			<div>
+			<table data-role="table" data-mode="columntoggle" class="ui-responsive" id="tb3">
+				<thead id="datosTodosAct">
+					<tr>
+						<th data-priority="1">Id</th>
+						<th data-priority="2">Nombre</th>
+						<th data-priority="3">Direción</th>
+						<th data-priority="4">RFC</th>
+						<th data-priority="5">Tel:</th>
+						<th data-priority="6">Clasif</th>
+						<th data-priority="7">Foto</th>
+						<th data-priority="8">Lat</th>
+						<th data-priority="9">Long</th>
+					</tr>
+				</thead>				
+				<tbody id="datosIDAct">
+				</tbody>
+				<tbody id="dat">						
+											 	
+									 	<td><input type="text" id="IdServicio2" placeholder="Numero de servicio"></td>
+									 	<td><input type="text" id="Nombre2" placeholder="Nombre"></td>
+									 	<td><input type="text" id="Direccion2" placeholder="Dirección"></td>
+									 	<td><input type="text" id="RFC2" placeholder="RFC"></td>
+									 	<td><input type="text" id="Telefono2" placeholder="Telefono"></td>
+									 	<td><select id="clasificacion2">
+									 	<option value="Restaurante">Restaurante</option>
+									 	<option value="Zapateria">Zapatería</option>
+									 	<option value="Farmacia">Farmacia</option>
+									 	</select></td>
+									 	<td><input type="button" id="btnFoto2" value="Tomar Foto"><div id="regFoto"></div></td>	
+									 	<td><input type="text" id="latitud2" placeholder="Latitud"></td>
+									 	<td><input type="text" id="longitud2" placeholder="Longitud"></td></tr>
+									 	<input type="button" id="btnActualizar" value="Actualizar servicio">
+													 	
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+<!--*************Fin Menu Actualizar Servicios************************-->
+<!--*************Menu Eliminar Servicios************************-->
+<div data-role="page" id="EliminarServicio">
+		<div data-role="header">
+			<p>Eliminar Servicio</p>
+		</div>	
+		<div data-role="content">
+			<input type="text" id="txtEliminar" placeholder="Escribe el numero de servicio">
+			<input type="button" id="btnEliminar" value="Eliminar Servicio">
+			<div>
+				 <table id="DatosEliminados">
+				 	
+				 </table>
+			</div>
+		</div>
+		<div data-role="footer">
+			<p><a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a></p>
+		</div>
+	</div>
+	<!--*************Fin Menu Eliminar servicios************************-->
+	</body>
+</html>
